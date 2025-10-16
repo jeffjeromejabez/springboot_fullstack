@@ -116,6 +116,7 @@ public class TrainTest {
         assertEquals(updatedTrain.getTotalSeats(), result.getTotalSeats());
         verify(trainRepository, times(1)).findById(1L);
         verify(trainRepository, times(1)).save(train);
+    }
 
     @Test
     void updateTrain_WhenTrainDoesNotExist_ShouldThrowException() {
