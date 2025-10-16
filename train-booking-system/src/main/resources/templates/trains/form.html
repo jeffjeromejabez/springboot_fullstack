@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="${train.id == null} ? 'Create Train' : 'Edit Train'">Train Form</title>
+</head>
+<body>
+    <main class="container mt-4" th:fragment="main">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">
+                            <i class="fas fa-train train-icon"></i>
+                            <span th:text="${train.id == null} ? 'Create New Train' : 'Edit Train'"></span>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="${train.id == null} ? @{/trains} : @{/trains/update/{id}(id=${train.id})}"
+                              th:object="${train}" method="post" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Train Name</label>
+                                <input type="text" class="form-control" id="name" th:field="*{name}" required
+                                       placeholder="Enter train name">
+                                <div class="invalid-feedback">
+                                    Please provide a train name.
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="source" class="form-label">Source Station</label>
+                                    <input type="text" class="form-control" id="source" th:field="*{source}" required
+                                           placeholder="Departure station">
+                                    <div class="invalid-feedback">
+                                        Please provide a source station.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="destination" class="form-label">Destination Station</label>
+                                    <input type="text" class="form-control" id="destination" th:field="*{destination}" required
+                                           placeholder="Arrival station">
+                                    <div class="invalid-feedback">
+                                        Please provide a destination station.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="basePrice" class="form-label">Base Price (₹)</label>
+                                    <input type="number" class="form-control" id="basePrice" th:field="*{basePrice}"
+                                           step="0.01" min="0" required placeholder="0.00">
+                                    <div class="invalid-feedback">
+                                        Please provide a valid base price.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="discountPercentage" class="form-label">Discount Percentage (%)</label>
+                                    <input type="number" class="form-control" id="discountPercentage" th:field="*{discountPercentage}"
+                                           step="0.01" min="0" max="100" required placeholder="0.00">
+                                    <div class="invalid-feedback">
+                                        Please provide a valid discount percentage (0-100).
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="totalSeats" class="form-label">Total Seats</label>
+                                <input type="number" class="form-control" id="totalSeats" th:field="*{totalSeats}"
+                                       min="1" required placeholder="Number of seats">
+                                <div class="invalid-feedback">
+                                    Please provide a valid number of seats.
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/trains" class="btn btn-secondary me-md-2">Cancel</a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Train
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

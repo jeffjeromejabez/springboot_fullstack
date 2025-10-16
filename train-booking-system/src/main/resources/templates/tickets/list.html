@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Ticket List</title>
+</head>
+<body>
+    <main class="container mt-4" th:fragment="main">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1><i class="fas fa-ticket-alt ticket-icon"></i>Your Booked Tickets</h1>
+            <p>Manage your train reservations</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" id="ticketSearch" class="form-control" placeholder="Search tickets by user, train, or date...">
+                </div>
+                <div class="col-md-4">
+                    <a href="/tickets/new" class="btn btn-success btn-lg w-100">
+                        <i class="fas fa-plus"></i> Book New Ticket
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ticket Cards -->
+        <div class="row">
+            <div th:each="ticket : ${tickets}" class="col-md-6 col-lg-4 mb-4">
+                <div class="card ticket-card h-100">
+                    <div class="card-header bg-success">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-ticket-alt"></i> Ticket #<span th:text="${ticket.id}"></span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <strong>User:</strong><br>
+                            <span th:text="${ticket.user.name}"></span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Train:</strong><br>
+                            <span th:text="${ticket.train.name}"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>From:</strong><br>
+                                <span th:text="${ticket.train.source}"></span>
+                            </div>
+                            <div class="col-6">
+                                <strong>To:</strong><br>
+                                <span th:text="${ticket.train.destination}"></span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Booking Date:</strong><br>
+                                <span th:text="${#temporals.format(ticket.bookingDate, 'MMM dd, yyyy HH:mm')}"></span>
+                            </div>
+                            <div class="col-6">
+                                <strong>Final Price:</strong><br>
+                                ₹<span th:text="${#numbers.formatDecimal(ticket.finalPrice, 1, 2)}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group w-100">
+                            <a th:href="@{/tickets/edit/{id}(id=${ticket.id})}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a th:href="@{/tickets/delete/{id}(id=${ticket.id})}" class="btn btn-danger btn-sm btn-delete">
+                                <i class="fas fa-trash"></i> Cancel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No tickets message -->
+        <div th:if="${#lists.isEmpty(tickets)}" class="text-center mt-5">
+            <i class="fas fa-ticket-alt fa-5x text-muted mb-3"></i>
+            <h3>No tickets booked yet</h3>
+            <p>Start your journey by booking your first ticket!</p>
+            <a href="/tickets/new" class="btn btn-primary">Book New Ticket</a>
+        </div>
+    </main>
+</body>
+</html>

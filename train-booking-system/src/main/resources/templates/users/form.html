@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="${user.id == null} ? 'Create User' : 'Edit User'">User Form</title>
+</head>
+<body>
+    <main class="container mt-4" th:fragment="main">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card">
+                    <div class="card-header" style="background-color: #6f42c1;">
+                        <h2 class="mb-0">
+                            <i class="fas fa-user user-icon"></i>
+                            <span th:text="${user.id == null} ? 'Create New User' : 'Edit User'"></span>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="${user.id == null} ? @{/users} : @{/users/update/{id}(id=${user.id})}"
+                              th:object="${user}" method="post" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="name" th:field="*{name}" required
+                                       placeholder="Enter full name">
+                                <div class="invalid-feedback">
+                                    Please provide a name.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" th:field="*{email}" required
+                                       placeholder="Enter email address">
+                                <div class="invalid-feedback">
+                                    Please provide a valid email address.
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/users" class="btn btn-secondary me-md-2">Cancel</a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save User
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="${ticket == null} ? 'Book Ticket' : 'Edit Ticket'">Ticket Form</title>
+</head>
+<body>
+    <main class="container mt-4" th:fragment="main">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card">
+                    <div class="card-header bg-success">
+                        <h2 class="mb-0">
+                            <i class="fas fa-ticket-alt ticket-icon"></i>
+                            <span th:text="${ticket == null} ? 'Book New Ticket' : 'Edit Ticket'"></span>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="${ticket == null} ? @{/tickets} : @{/tickets/update/{id}(id=${ticket.id})}"
+                              method="post" class="needs-validation" novalidate>
+                            <div class="mb-3" th:if="${ticket == null}">
+                                <label for="userId" class="form-label">Select User</label>
+                                <select class="form-select" id="userId" name="userId" required>
+                                    <option value="">Choose a user...</option>
+                                    <option th:each="user : ${users}" th:value="${user.id}"
+                                            th:text="${user.name + ' (' + user.email + ')'}"></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a user.
+                                </div>
+                            </div>
+                            <div class="mb-3" th:if="${ticket != null}">
+                                <label class="form-label">User</label>
+                                <input type="text" class="form-control" th:value="${ticket.user.name}" readonly>
+                            </div>
+
+                            <div class="mb-3" th:if="${ticket == null}">
+                                <label for="trainId" class="form-label">Select Train</label>
+                                <select class="form-select" id="trainId" name="trainId" required>
+                                    <option value="">Choose a train...</option>
+                                    <option th:each="train : ${trains}" th:value="${train.id}"
+                                            th:text="${train.name + ' (' + train.source + ' to ' + train.destination + ')'}"></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a train.
+                                </div>
+                            </div>
+                            <div class="mb-3" th:if="${ticket != null}">
+                                <label class="form-label">Train</label>
+                                <input type="text" class="form-control" th:value="${ticket.train.name}" readonly>
+                            </div>
+
+                            <div th:if="${ticket != null}" class="mb-3">
+                                <label class="form-label">Booking Date</label>
+                                <input type="text" class="form-control" th:value="${#temporals.format(ticket.bookingDate, 'yyyy-MM-dd HH:mm')}" readonly>
+                            </div>
+
+                            <div th:if="${ticket != null}" class="mb-3">
+                                <label class="form-label">Final Price</label>
+                                <input type="text" class="form-control" th:value="'$' + #numbers.formatDecimal(ticket.finalPrice, 1, 2)" readonly>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/tickets" class="btn btn-secondary me-md-2">Cancel</a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save"></i>
+                                    <span th:text="${ticket == null} ? 'Book Ticket' : 'Update Ticket'"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Train List</title>
+</head>
+<body>
+    <main class="container mt-4" th:fragment="main">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1><i class="fas fa-train train-icon"></i>Available Trains</h1>
+            <p>Find and book your perfect train journey</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" id="trainSearch" class="form-control" placeholder="Search trains by name, source, or destination...">
+                </div>
+                <div class="col-md-4">
+                    <a href="/trains/new" class="btn btn-success btn-lg w-100">
+                        <i class="fas fa-plus"></i> Add New Train
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Train Cards -->
+        <div class="row">
+            <div th:each="train : ${trains}" class="col-md-6 col-lg-4 mb-4">
+                <div class="card train-card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-train"></i> <span th:text="${train.name}"></span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Source:</strong><br>
+                                <span th:text="${train.source}"></span>
+                            </div>
+                            <div class="col-6">
+                                <strong>Destination:</strong><br>
+                                <span th:text="${train.destination}"></span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Base Price:</strong><br>
+                                ₹<span th:text="${#numbers.formatDecimal(train.basePrice, 1, 2)}"></span>
+                            </div>
+                            <div class="col-6">
+                                <strong>Discount:</strong><br>
+                                <span th:text="${train.discountPercentage}"></span>%
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <strong>Total Seats:</strong> <span th:text="${train.totalSeats}"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group w-100">
+                            <a th:href="@{/trains/edit/{id}(id=${train.id})}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a th:href="@{/trains/delete/{id}(id=${train.id})}" class="btn btn-danger btn-sm btn-delete">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No trains message -->
+        <div th:if="${#lists.isEmpty(trains)}" class="text-center mt-5">
+            <i class="fas fa-train fa-5x text-muted mb-3"></i>
+            <h3>No trains available</h3>
+            <p>Start by adding your first train!</p>
+            <a href="/trains/new" class="btn btn-primary">Add New Train</a>
+        </div>
+    </main>
+</body>
+</html>
